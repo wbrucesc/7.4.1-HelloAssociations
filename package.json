@@ -1,0 +1,19 @@
+{
+  "name": "7.4.1-HelloAssociations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "jshintConfig": {
+    "esversion": 6
+  },
+  "dependencies": {
+    "pg": "^7.2.0",
+    "sequelize": "^4.8.0"
+  }
+}
