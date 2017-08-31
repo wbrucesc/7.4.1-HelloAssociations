@@ -38,7 +38,7 @@ passport.deserializeUser(function(id, done){
   });
 });
 
-
+app.use(passport.initialize());
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -46,6 +46,10 @@ app.set('view engine', 'handlebars');
 
 app.get('/', function(req, res){
     res.render('index');
+});
+
+app.get('/secret', passport.authenticate('local'), function(req, res){
+  res.send('SECRET');
 });
 
 
