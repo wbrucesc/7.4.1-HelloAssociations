@@ -2,6 +2,7 @@ const models = require('./models');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -38,20 +39,40 @@ passport.deserializeUser(function(id, done){
   });
 });
 
+app.use(session({
+  secret: 'i am a cat',
+  resave: false,
+  saveUninitialized: true             //will create a session if one hasn't been initialized yet
+}));
+
+
 app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+const requireLogin = function(req, res, next) {
+  if (req.user !== null) {
+    next();
+  } else {
+    res.redirect('login');
+  }
+};
 
 app.get('/', function(req, res){
     res.render('index');
 });
 
-app.get('/secret', passport.authenticate('local'), function(req, res){
+app.get('/secret', requireLogin, function(req, res){
   res.send('SECRET');
 });
 
-
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/secret',
+    failureRedirect: '/'
+}));
 
 app.listen(3000);
